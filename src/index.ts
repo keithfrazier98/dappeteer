@@ -8,6 +8,16 @@ import { isNewerVersion } from './utils';
 // re-export
 export { getMetamask };
 
+declare global {
+  namespace NodeJS {
+    export interface Global {
+      page: puppeteer.Page;
+      browser: puppeteer.Browser;
+      metamask: Dappeteer;
+    }
+  }
+}
+
 export type LaunchOptions = Parameters<typeof puppeteer['launch']>[0] & {
   metamaskVersion: 'v10.8.1' | 'latest' | string;
   metamaskLocation?: Path;
@@ -116,8 +126,8 @@ export async function setupMetamask(
 
   await importAccount(
     page,
-    options.seed,
-    options.password,
+    options.seed || 'already turtle birth enroll since owner keep patch skirt drift any dinner',
+    options.password || 'password1234',
     options.hideSeed,
   );
 
