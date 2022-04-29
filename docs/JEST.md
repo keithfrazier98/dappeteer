@@ -1,15 +1,43 @@
 # dAppeteer with jest
 
-As dAppeteer is Puppeteer with Metamask. Using it with jest is pretty similar to `jest-puppeteer`.
+dAppeteer is Puppeteer with Metamask. Using it with jest is pretty similar to `jest-puppeteer`.
 
 ## Use preset
 
 You can use jest [preset](https://jestjs.io/docs/configuration#preset-string) provided by dappeteer without installing additional packages
+
 ```json
 {
-    "preset": "@chainsafe/dappeteer"
+  "preset": "@chainsafe/dappeteer"
 }
 ```
+
+
+The preset setup script uses the following envrionment vairables contitionally:
+
+```
+DEFAULT_ACCT_SEED = "your seed"
+DEFAULT_ACCT_PASS = "your password"
+DEFAULT_MM_VERSION = "v10.8.1 OR your specified version OR omit to defailt to 'latest'"
+DEFAULT_HIDE_SEED = 'true' OR 'false' OR omit entirely will equal false
+DEFAULT_TEST_NETS = 'true' OR 'false' OR omit entirely will equal false
+```
+**React apps need not append 'REACT_APP_' to these environment variables**
+
+If not supplied, dApeeteer will use a hardcoded values. Omitting the version will default to 'latest' which results in unexpected behavior as metamask updates. It is recommended to supply your seed and password so your account is immediately available after setup. 
+
+When using the preset, dAppeteer injects `metamask`, `browser`, and `page` in the global scope of the test enviornment. You can use these variables directly after setup.
+
+```js
+describe('some test suite', () => {
+  beforeAll(async () => {
+    let browser = global.browser;
+    let metamask = global.metamask;
+    let page = global.page;
+  });
+});
+```
+
 Write your test
 ```js
 describe('Google', () => {
@@ -28,6 +56,7 @@ describe('Google', () => {
 In case you need more customisable use case you can rebuild it from scratch.
 
 First lets define or entry `jest.config.js`
+
 ```js
 // jest.config.js
 
@@ -39,6 +68,7 @@ module.exports = {
 ```
 
 Then create `setup.js` wit responsibility to start Puppeteer with Metamask and `teardown.js` for clean up after test's
+
 ```js
 // setup.js
 
@@ -68,6 +98,7 @@ module.exports = async function () {
   await writeFile(path.join(DIR, 'wsEndpoint'), browser.wsEndpoint());
 };
 ```
+
 ```js
 // teardown.js
 
@@ -87,10 +118,11 @@ module.exports = async function () {
 ```
 
 And for the end we need a custom Test Environment for dAppeteer to inject features into the tests
+
 ```js
 // environment.js
 
-const {readFile} = require('fs').promises;
+const { readFile } = require('fs').promises;
 const os = require('os');
 const path = require('path');
 const puppeteer = require('puppeteer');
