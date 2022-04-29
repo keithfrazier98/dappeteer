@@ -28,10 +28,6 @@
     "dapp",
     "ethereum"
   ],
-  "contributors": [
-    "Juan Cazala <juan@decentraland.org>",
-    "ChainSafe <info@chainsafe.io>"
-  ],
   "license": "MIT",
   "dependencies": {
     "node-stream-zip": "^1.13.0"
