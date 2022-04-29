@@ -116,8 +116,8 @@ export async function setupMetamask(
 
   await importAccount(
     page,
-    options.seed || 'already turtle birth enroll since owner keep patch skirt drift any dinner',
-    options.password || 'password1234',
+    options.seed,
+    options.password,
     options.hideSeed,
   );
 
